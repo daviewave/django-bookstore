@@ -1,1 +1,9 @@
 venv/*
+
+bookstore/__pycache__
+
+books/__pycache__
+
+books/migrations
+
+.DS_store

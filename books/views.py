@@ -1,6 +1,9 @@
-from django.http import HttpResponse
 from django.shortcuts import render
+import json
 
-# Create your views here.
+books_data = open('/Users/dsilveira/Desktop/python-venv-4.2.0/Bookstore-Project/books.json').read()
+data = json.loads(books_data)
+
 def index(request):
-    return render(request, 'index.html')
+    context = {'books':data}
+    return render(request, 'books/index.html', context)

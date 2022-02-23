@@ -28,7 +28,7 @@ class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return f"{self.user}"
+        return f"{self.body}"
 
 
 

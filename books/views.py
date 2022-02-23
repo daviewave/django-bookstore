@@ -1,6 +1,7 @@
 from multiprocessing import context
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from books.models import Book, Review
 
@@ -8,6 +9,7 @@ from books.models import Book, Review
 class BookListView(ListView):
     # template_name = 'books/index.html'
     # context_object_name = 'books'
+    # login_url = '/login/'
 
     def get_queryset(self):
         return Book.objects.all()
@@ -22,6 +24,7 @@ class BookDetailView(DetailView):
         context['authors'] = context['book'].authors.all()
         return context
 
+
 # VIEWS #
 # def index(request):
 #     dbData = Book.objects.all()
@@ -34,9 +37,17 @@ class BookDetailView(DetailView):
 #     context = {'book':singleBook, 'reviews':reviews}
 #     return render(request, 'books/show.html', context)
 
+def author(request, author):
+    books = Book.objects.filter(authors__name=author)
+    context = {'book_list': books}
+    return render(request, 'books/book_list.html', context)
+
 def review(request, id):
-    body = request.POST['review']
-    new_review = Review(body=body, book_id=id)
-    new_review.save()
+    print(request.user)
+    if request.user.is_authenticated:
+        body = request.POST['review']
+        new_review = Review(body=body, book_id=id, user=request.user)
+        new_review.save()
     return redirect('/book')
+    
    
